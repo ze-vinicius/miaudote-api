@@ -16,8 +16,6 @@ class AccountRepository(BaseRepository):
         return new_account
 
     def get_one_by_username(self, username: str):
-        account = (
-            self.db.query(AccountModel).where(AccountModel.username == username).first()
-        )
+        account = self.db.query(AccountModel).where(AccountModel.username == username).first()
 
         return account

@@ -4,24 +4,23 @@ from pydantic import BaseModel
 
 
 class AddressBase(BaseModel):
-  city: str
-  country: str
-  state: str
-  street_address: Optional[str]
-  zip_code: Optional[str]
+    city: str
+    country: str
+    state: str
+    street_address: Optional[str]
+    zip_code: Optional[str]
+
 
 class AddressCreate(AddressBase):
-  pet_shelter_id: str
+    pet_shelter_id: str
+
 
 class AddressInDbBase(AddressCreate):
-  id: int
+    id: int
 
-  class Config:
-    orm_mode = True
-  
+    class Config:
+        orm_mode = True
+
+
 class Address(AddressInDbBase):
-  pass
-
-
-
-  
+    pass

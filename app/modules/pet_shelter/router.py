@@ -12,14 +12,11 @@ router = APIRouter(
 )
 
 fake_pet_shelters = {
-    "1": {
-        "id": "1",
-        "name": "Marabichos"
-    },
+    "1": {"id": "1", "name": "Marabichos"},
 }
 
 
-@router.get('/')
+@router.get("/")
 async def read_pet_shelters(db: Session = Depends(get_db)):
     pet_shelter_service = GetAllPetSheltersService(db)
 
@@ -27,7 +24,8 @@ async def read_pet_shelters(db: Session = Depends(get_db)):
 
     return pet_shelters
 
-@router.post('/')
+
+@router.post("/")
 async def create_pet_shelter(pet_shelter: CreatePetShelterParams, db: Session = Depends(get_db)):
     pet_shelter_service = CreatePetShelterService(db)
 
@@ -35,7 +33,8 @@ async def create_pet_shelter(pet_shelter: CreatePetShelterParams, db: Session = 
 
     return created_pet_shelter
 
-@router.get('/{pet_shelter_id}')
+
+@router.get("/{pet_shelter_id}")
 async def read_pet_shelter(pet_shelter_id: str):
     if pet_shelter_id not in fake_pet_shelters:
         raise HTTPException(stauts_code=404, detail="pet.not.found")

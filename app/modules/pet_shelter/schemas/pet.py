@@ -1,6 +1,7 @@
 from enum import Enum
 from pydantic import BaseModel
 
+
 class PetSize(str, Enum):
     SMALL = "SMALL"
     MID = "MID"
@@ -24,20 +25,23 @@ class PetSex(str, Enum):
 
 
 class PetTemper(str, Enum):
-    SHY = "SHY" 
-    DOCILE = "DOCILE" 
+    SHY = "SHY"
+    DOCILE = "DOCILE"
     AGGRESSIVE = "AGGRESSIVE"
+
 
 class AdoptionStatus(str, Enum):
     AVAILABLE = "AVAILABLE"
     NOT_AVAILABLE = "NOT_AVAILABLE"
     ADOPTED = "ADOPTED"
 
+
 class HealthStatus(str, Enum):
     HEALTHY = "HEALTHY"
     SICK = "SICK"
     INJURIED = "INJURIED"
     DEAD = "DEAD"
+
 
 class PetBase(BaseModel):
     age: PetAge
@@ -51,8 +55,10 @@ class PetBase(BaseModel):
     health_status: HealthStatus
     adoption_status: AdoptionStatus
 
+
 class PetCreate(PetBase):
     pet_shelter_id: int
+
 
 class PetInDbBase(PetBase):
     id: int
@@ -61,6 +67,6 @@ class PetInDbBase(PetBase):
     class Config:
         orm_mode = True
 
+
 class Pet(PetInDbBase):
     pass
-    
