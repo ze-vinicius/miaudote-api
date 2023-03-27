@@ -2,42 +2,42 @@ from enum import Enum
 from pydantic import BaseModel
 
 class PetSize(str, Enum):
-    small = "small"
-    mid = "mid"
-    large = "large"
+    SMALL = "SMALL"
+    MID = "MID"
+    LARGE = "LARGE"
 
 
 class PetAge(str, Enum):
-    less_than_one = "less_than_one"
-    between_one_and_seven = "between_one_and_seven"
-    greater_than_seven = "greater_than_seven"
+    LESS_THAN_ONE = "LESS_THAN_ONE"
+    BETWEEN_ONE_AND_SEVEN = "BETWEEN_ONE_AND_SEVEN"
+    GREATHER_THAN_SEVEN = "GREATHER_THAN_SEVEN"
 
 
 class PetSpecies(str, Enum):
-    cat = "cat"
-    dog = "dog"
+    CAT = "CAT"
+    DOG = "DOG"
 
 
 class PetSex(str, Enum):
-    male = "male"
-    female = "female"
+    MALE = "MALE"
+    FEMALE = "FEMALE"
 
 
 class PetTemper(str, Enum):
-    shy = "shy" 
-    docile = "docile" 
-    aggressive = "aggressive"
+    SHY = "SHY" 
+    DOCILE = "DOCILE" 
+    AGGRESSIVE = "AGGRESSIVE"
 
 class AdoptionStatus(str, Enum):
-    available = "available"
-    not_available = "not_available"
-    adopted = "adopted"
+    AVAILABLE = "AVAILABLE"
+    NOT_AVAILABLE = "NOT_AVAILABLE"
+    ADOPTED = "ADOPTED"
 
 class HealthStatus(str, Enum):
-    healthy = "healthy"
-    sick = "sick"
-    injured = "injured"
-    dead = "dead"
+    HEALTHY = "HEALTHY"
+    SICK = "SICK"
+    INJURIED = "INJURIED"
+    DEAD = "DEAD"
 
 class PetBase(BaseModel):
     age: PetAge

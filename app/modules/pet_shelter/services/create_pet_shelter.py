@@ -1,10 +1,10 @@
 from fastapi import HTTPException
-from app.db.repositories.account_repository import AccountRepository
-from app.db.repositories.address_repository import AddressRepository
-from app.db.repositories.pet_shelter_repository import PetShelterRepository
-from app.schemas.account import AccountCreate
-from app.schemas.address import AddressBase, AddressCreate
-from app.schemas.pet_shelter import PetShelter, PetShelterBase, PetShelterCreate
+from app.modules.auth.repositories.account import AccountRepository
+from app.modules.pet_shelter.repositories.address import AddressRepository
+from app.modules.pet_shelter.repositories.pet_shelter import PetShelterRepository
+from app.modules.auth.schemas.account import AccountCreate
+from app.modules.pet_shelter.schemas.address import AddressBase, AddressCreate
+from app.modules.pet_shelter.schemas.pet_shelter import PetShelter, PetShelterBase, PetShelterCreate
 from sqlalchemy.orm import Session
 
 from app.utils.hash import Hash

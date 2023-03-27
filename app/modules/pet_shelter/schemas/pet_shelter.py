@@ -1,13 +1,12 @@
-from enum import Enum
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import  BaseModel, EmailStr
 
-from app.schemas.address import Address
+from app.modules.pet_shelter.schemas.address import Address
 
 class PetShelterBase(BaseModel):
     name: str
     phone: str
-    email: str
+    email: EmailStr
     description: str
 
     instagram_address: Optional[str]

@@ -1,8 +1,8 @@
 from sqlalchemy.orm.session import Session
-from app.db.models.account import AccountModel
-from app.db.repositories.base import BaseRepository
+from app.modules.auth.models.account import AccountModel
+from app.utils.base_repository import BaseRepository
 
-from app.schemas.account import AccountCreate
+from app.modules.auth.schemas.account import AccountCreate
 
 class AccountRepository(BaseRepository):
   def create(self, payload: AccountCreate):

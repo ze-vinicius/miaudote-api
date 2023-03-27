@@ -1,7 +1,7 @@
 from typing import Optional
-from app.db.models import AccountModel
-from app.db.models.address import AddressModel
-from ..base import Base
+from app.modules.auth.models.account import AccountModel
+from app.modules.pet_shelter.models.address import AddressModel
+from app.db.base import Base
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 

@@ -1,9 +1,7 @@
-from sqlalchemy.orm.session import Session
-from app.db.models.address import AddressModel
-from app.db.models.pet_shelter import PetShelterModel
-from app.db.repositories.base import BaseRepository
+from app.modules.pet_shelter.models.address import AddressModel
+from app.utils.base_repository import BaseRepository
 
-from app.schemas import AddressCreate
+from app.modules.pet_shelter.schemas.address import AddressCreate
 
 class AddressRepository(BaseRepository):
   def create(self, payload: AddressCreate):

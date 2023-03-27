@@ -1,5 +1,6 @@
 fastapi
 uvicorn
+pydantic[email]
 sqlalchemy
 passlib
 bcrypt
