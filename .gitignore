@@ -1,2 +1,3 @@
 fastapi-env
 .pytest_cache
+database.db

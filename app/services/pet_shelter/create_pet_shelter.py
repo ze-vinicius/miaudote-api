@@ -7,6 +7,8 @@ from app.schemas.address import AddressBase, AddressCreate
 from app.schemas.pet_shelter import PetShelter, PetShelterBase, PetShelterCreate
 from sqlalchemy.orm import Session
 
+from app.utils.hash import Hash
+
 class CreatePetShelterParams(PetShelterBase):
   password: str
   address: AddressBase
@@ -25,8 +27,8 @@ class CreatePetShelterService:
 
     if (alreadyExists):
       raise HTTPException(status_code=400, detail='pet_shelters.create.error.user_already_exists')
-
-    account_payload = AccountCreate(username=pet_shelter.email, password=pet_shelter.password)
+    
+    account_payload = AccountCreate(username=pet_shelter.email, password=Hash().encrypt(pet_shelter.password))
     
     created_account = account_respository.create(account_payload)
 
