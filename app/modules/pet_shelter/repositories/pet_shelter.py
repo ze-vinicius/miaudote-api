@@ -25,3 +25,6 @@ class PetShelterRepository(BaseRepository):
 
     def get_all(self):
         return self.db.query(PetShelterModel).all()
+
+    def get_one_by_account_id(self, account_id: str):
+        return self.db.query(PetShelterModel).where(PetShelterModel.account_id == account_id).first()
