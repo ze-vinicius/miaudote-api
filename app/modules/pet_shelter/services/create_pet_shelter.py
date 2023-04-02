@@ -6,9 +6,10 @@ from app.modules.auth.schemas.account import AccountCreate
 from app.modules.pet_shelter.schemas.address import AddressInDb
 from app.modules.pet_shelter.schemas.pet_shelter import (
     PetShelterIn,
+    PetShelter,
+    PetShelterInDb
 )
 from sqlalchemy.orm import Session
-from app.modules.pet_shelter.schemas.pet_shelter.pet_shelter_in_db import PetShelterInDb
 
 from app.utils.hash import Hash
 
@@ -62,20 +63,8 @@ class CreatePetShelterService:
             pet_shelter_id=created_pet_shelter.id,
         )
 
-        created_address = address_repository.create(create_address_payload)
+        address_repository.create(create_address_payload)
 
         print(created_pet_shelter)
 
-        response = {
-            "id": created_pet_shelter.id,
-            "description": created_pet_shelter.description,
-            "email": created_pet_shelter.email,
-            "name": created_pet_shelter.name,
-            "phone": created_pet_shelter.phone,
-            "instagram_address": created_pet_shelter.instagram_address,
-            "facebook_address": created_pet_shelter.instagram_address,
-            "twitter_address": created_pet_shelter.twitter_address,
-            "address": created_address,
-        }
-
-        return response
+        return PetShelter.from_orm(created_pet_shelter)

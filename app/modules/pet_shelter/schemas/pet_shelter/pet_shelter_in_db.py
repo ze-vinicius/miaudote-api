@@ -4,7 +4,6 @@ from pydantic import BaseModel, EmailStr
 
 
 class PetShelterInDb(BaseModel):
-    id: int
     name: str
     phone: str
     email: EmailStr
@@ -14,6 +13,6 @@ class PetShelterInDb(BaseModel):
     facebook_address: Optional[str]
     twitter_address: Optional[str]
 
+    account_id: int
 
-class PetShelter(PetShelterInDb):
-    pass
+

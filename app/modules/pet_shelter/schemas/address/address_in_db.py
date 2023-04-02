@@ -9,4 +9,5 @@ class AddressInDb(BaseModel):
     state: str
     street_address: Optional[str]
     zip_code: Optional[str]
-    pet_shelter_id: str
+
+    pet_shelter_id: int

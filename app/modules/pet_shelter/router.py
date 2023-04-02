@@ -11,14 +11,12 @@ from app.modules.pet_shelter.services.get_all_pet_shelters import GetAllPetShelt
 from app.modules.pet_shelter.services.create_pet_shelter import CreatePetShelterService
 from sqlalchemy.orm import Session
 
+from app.modules.pet_shelter.services.get_pet_shelter import GetPetShelterService
+
 router = APIRouter(
     tags=["pet_shelters", "pets"],
     responses={404: {"description": "Not Found"}},
 )
-
-fake_pet_shelters = {
-    "1": {"id": "1", "name": "Marabichos"},
-}
 
 
 @router.get("/pet_shelters")
@@ -47,11 +45,10 @@ def get_all_pets_by_pet_shelter(pet_shelter_id: str, db: Session = Depends(get_d
 
 
 @router.get("/pet_shelters/{pet_shelter_id}")
-def read_pet_shelter(pet_shelter_id: str):
-    if pet_shelter_id not in fake_pet_shelters:
-        raise HTTPException(status_code=404, detail="pet.not.found")
+def read_pet_shelter(pet_shelter_id: str, db: Session = Depends(get_db)):
+    get_pet_shelter_service = GetPetShelterService(db)
 
-    return fake_pet_shelters[pet_shelter_id]
+    return get_pet_shelter_service.execute(pet_shelter_id)
 
 
 @router.post("/pets")
@@ -63,6 +60,7 @@ def create_pet(
 ):
     create_pet_service = CreatePetService(db)
 
-    pet = create_pet_service.execute(pet_form=pet_form, profile_picture=profile_picture, account=current_account)
+    pet = create_pet_service.execute(
+        pet_form=pet_form, profile_picture=profile_picture, account=current_account)
 
     return pet
