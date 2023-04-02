@@ -1,20 +1,13 @@
 from app.modules.pet_shelter.models.pet_shelter import PetShelterModel
 from app.utils.base_repository import BaseRepository
 
-from app.modules.pet_shelter.schemas.pet_shelter import PetShelterCreate
+from app.modules.pet_shelter.schemas.pet_shelter import PetShelterInDb
 
 
 class PetShelterRepository(BaseRepository):
-    def create(self, payload: PetShelterCreate):
+    def create(self, payload: PetShelterInDb):
         new_pet_shelter = PetShelterModel(
-            name=payload.name,
-            email=payload.email,
-            phone=payload.phone,
-            description=payload.description,
-            instagram_address=payload.instagram_address,
-            facebook_address=payload.facebook_address,
-            twitter_address=payload.twitter_address,
-            account_id=payload.account_id,
+            **payload.dict()
         )
 
         self.db.add(new_pet_shelter)
@@ -26,5 +19,5 @@ class PetShelterRepository(BaseRepository):
     def get_all(self):
         return self.db.query(PetShelterModel).all()
 
-    def get_one_by_account_id(self, account_id: str):
+    def get_one_by_account_id(self, account_id: int):
         return self.db.query(PetShelterModel).where(PetShelterModel.account_id == account_id).first()

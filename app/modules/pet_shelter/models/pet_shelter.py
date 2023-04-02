@@ -14,6 +14,7 @@ class PetShelterModel(Base):
     email: Mapped[str]
     phone: Mapped[str]
     description: Mapped[str]
+    profile_picture: Mapped[Optional[str]]
 
     # Social Media
     instagram_address: Mapped[Optional[str]]

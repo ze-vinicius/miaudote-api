@@ -15,5 +15,10 @@ class Settings:
     SECRET_KEY: str = os.getenv("SECRET_KEY")
     ALGORITHM: str = "HS256"
 
+    AWS_SECRET_KEY: str = os.getenv("AWS_SECRET_KEY")
+    AWS_ACCESS_KEY_ID: str = os.getenv("AWS_ACCESS_KEY_ID")
+    BUCKET_ENDPOINT: str = os.getenv("BUCKET_ENDPOINT")
+    AWS_BUCKET: str = os.getenv("AWS_BUCKET")
+
 
 settings = Settings()

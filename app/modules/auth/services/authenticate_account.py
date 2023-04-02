@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.core.security import create_access_token
 
@@ -12,7 +13,7 @@ class AuthenticateAccount:
     def __init__(self, db: Session):
         self.db = db
 
-    def execute(self, account_form: AccountAuth):
+    def execute(self, account_form: OAuth2PasswordRequestForm):
         account_repository = AccountRepository(self.db)
 
         existent_account = account_repository.get_one_by_username(account_form.username)

@@ -8,3 +8,6 @@ python-jose[cryptography]
 python-dotenv
 black
 python-multipart
+boto3
+uuid
+pydantic_computed
