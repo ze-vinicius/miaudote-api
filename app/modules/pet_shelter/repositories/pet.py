@@ -16,5 +16,8 @@ class PetRepository(BaseRepository):
     def get_all(self):
         return self.db.query(PetModel).all()
 
-    def get_all_by_pet_shelter_id(self, pet_shelter_id: str):
+    def get_all_by_pet_shelter_id(self, pet_shelter_id: int):
         return self.db.query(PetModel).where(PetModel.pet_shelter_id == pet_shelter_id).all()
+
+    def get_one_by_id(self, id: int):
+        return self.db.query(PetModel).where(PetModel.id == id).first()

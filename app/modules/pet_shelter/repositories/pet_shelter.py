@@ -1,3 +1,4 @@
+from sqlalchemy import delete
 from app.modules.pet_shelter.models.pet_shelter import PetShelterModel
 from app.utils.base_repository import BaseRepository
 
@@ -24,3 +25,9 @@ class PetShelterRepository(BaseRepository):
 
     def get_one_by_id(self, id: int):
         return self.db.query(PetShelterModel).where(PetShelterModel.id == id).first()
+
+    def delete_one_by_id(self, address_id: int):
+        stmt = (
+            delete(PetShelterModel).where(PetShelterModel.id == address_id)
+        )
+        self.db.execute(stmt).all()

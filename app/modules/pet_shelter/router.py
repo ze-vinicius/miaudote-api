@@ -10,6 +10,7 @@ from app.modules.pet_shelter.services.get_all_pets_from_pet_shelter import GetAl
 from app.modules.pet_shelter.services.get_all_pet_shelters import GetAllPetSheltersService
 from app.modules.pet_shelter.services.create_pet_shelter import CreatePetShelterService
 from sqlalchemy.orm import Session
+from app.modules.pet_shelter.services.get_pet import GetPetService
 
 from app.modules.pet_shelter.services.get_pet_shelter import GetPetShelterService
 
@@ -45,10 +46,17 @@ def get_all_pets_by_pet_shelter(pet_shelter_id: str, db: Session = Depends(get_d
 
 
 @router.get("/pet_shelters/{pet_shelter_id}")
-def read_pet_shelter(pet_shelter_id: str, db: Session = Depends(get_db)):
+def get_one_pet_shelter(pet_shelter_id: int, db: Session = Depends(get_db)):
     get_pet_shelter_service = GetPetShelterService(db)
 
     return get_pet_shelter_service.execute(pet_shelter_id)
+
+
+@router.get('/pets/{pet_id}')
+def get_one_pet(pet_id: int, db: Session = Depends(get_db)):
+    get_pet_service = GetPetService(db)
+
+    return get_pet_service.execute(pet_id)
 
 
 @router.post("/pets")

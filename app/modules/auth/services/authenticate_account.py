@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.core.security import create_access_token
+from app.modules.auth.exceptions import InvalidCredentials
 
 from app.modules.auth.repositories.account import AccountRepository
 from app.modules.auth.schemas.account import AccountAuth
@@ -19,14 +20,14 @@ class AuthenticateAccount:
         existent_account = account_repository.get_one_by_username(account_form.username)
 
         if not existent_account:
-            raise HTTPException(status_code=404, detail="sessions.account.not_found")
+            raise InvalidCredentials()
 
         password_is_valid = Hash().verify(
             hashed_password=existent_account.password, plain_password=account_form.password
         )
 
         if not password_is_valid:
-            raise HTTPException(status_code=400, detail="sessions.account.invalid_user_credentials")
+            raise InvalidCredentials()
 
         access_token = create_access_token(
             data={
