@@ -10,9 +10,9 @@ class PetShelterIn(BaseModel):
     email: EmailStr
     description: str
 
-    instagram_address: Optional[str]
-    facebook_address: Optional[str]
-    twitter_address: Optional[str]
-    
+    instagram_address: Optional[str] = None
+    facebook_address: Optional[str] = None
+    twitter_address: Optional[str] = None
+
     address: AddressIn
     password: str

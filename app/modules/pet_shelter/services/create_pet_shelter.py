@@ -1,15 +1,12 @@
+from typing import Optional
 from fastapi import HTTPException
 from app.modules.auth.repositories.account import AccountRepository
-from app.modules.pet_shelter.exceptions import AccountNotCreated, AlreadyExists
+from app.modules.pet_shelter.exceptions import AccountNotCreated, PetShelterAlreadyExists
 from app.modules.pet_shelter.repositories.address import AddressRepository
 from app.modules.pet_shelter.repositories.pet_shelter import PetShelterRepository
 from app.modules.auth.schemas.account import AccountCreate
 from app.modules.pet_shelter.schemas.address import AddressInDb
-from app.modules.pet_shelter.schemas.pet_shelter import (
-    PetShelterIn,
-    PetShelter,
-    PetShelterInDb
-)
+from app.modules.pet_shelter.schemas.pet_shelter import PetShelterIn, PetShelter, PetShelterInDb
 from sqlalchemy.orm import Session
 
 from app.utils.hash import Hash
@@ -22,20 +19,23 @@ class CreatePetShelterService:
         self.address_repository = AddressRepository(db)
         self.account_respository = AccountRepository(db)
 
-    def delete_created_pet_shelter(self, pet_shelter_id: int = None, account_id: int = None, address_id: int = None):
-        self.address_repository.delete_by_id(address_id)
-        self.pet_shelter_repository.delete_by_id(pet_shelter_id)
-        self.account_respository.delete_by_id(account_id)
+    def delete_created_pet_shelter(
+        self, pet_shelter_id: Optional[int] = None, account_id: Optional[int] = None, address_id: Optional[int] = None
+    ):
+        if address_id:
+            self.address_repository.delete_one_by_id(address_id)
+        if pet_shelter_id:
+            self.pet_shelter_repository.delete_one_by_id(pet_shelter_id)
+        if account_id:
+            self.account_respository.delete_one_by_id(account_id)
 
     def execute(self, pet_shelter: PetShelterIn):
-        alreadyExists = self.account_respository.get_one_by_username(
-            pet_shelter.email)
+        alreadyExists = self.account_respository.get_one_by_username(pet_shelter.email)
 
         if alreadyExists:
-            raise AlreadyExists()
+            raise PetShelterAlreadyExists()
 
-        account_payload = AccountCreate(
-            username=pet_shelter.email, password=Hash().encrypt(pet_shelter.password))
+        account_payload = AccountCreate(username=pet_shelter.email, password=Hash().encrypt(pet_shelter.password))
 
         created_account = self.account_respository.create(account_payload)
 
@@ -53,13 +53,10 @@ class CreatePetShelterService:
             twitter_address=pet_shelter.twitter_address,
         )
 
-        created_pet_shelter = self.pet_shelter_repository.create(
-            create_pet_shelter_payload)
-        
+        created_pet_shelter = self.pet_shelter_repository.create(create_pet_shelter_payload)
+
         if created_pet_shelter == None or not created_pet_shelter.id:
-            self.delete_created_pet_shelter(
-                account_id=created_account.id
-            )
+            self.delete_created_pet_shelter(account_id=created_account.id)
             raise AccountNotCreated()
 
         create_address_payload = AddressInDb(
@@ -71,14 +68,10 @@ class CreatePetShelterService:
             pet_shelter_id=created_pet_shelter.id,
         )
 
-        address_created = self.address_repository.create(
-            create_address_payload)
+        address_created = self.address_repository.create(create_address_payload)
 
         if not address_created.id:
-            self.delete_created_pet_shelter(
-                pet_shelter_id=created_pet_shelter.id,
-                account_id=created_account.id
-            )
+            self.delete_created_pet_shelter(pet_shelter_id=created_pet_shelter.id, account_id=created_account.id)
             raise AccountNotCreated()
 
         return PetShelter.from_orm(created_pet_shelter)

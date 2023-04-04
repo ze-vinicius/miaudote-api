@@ -14,5 +14,3 @@ class PetShelterInDb(BaseModel):
     twitter_address: Optional[str]
 
     account_id: int
-
-

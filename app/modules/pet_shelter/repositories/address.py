@@ -7,18 +7,14 @@ from sqlalchemy import delete
 
 class AddressRepository(BaseRepository):
     def create(self, payload: AddressInDb):
-        new_address = AddressModel(
-            **payload.dict()
-        )
+        new_address = AddressModel(**payload.dict())
 
         self.db.add(new_address)
         self.db.commit()
         self.db.refresh(new_address)
 
         return new_address
-    
+
     def delete_one_by_id(self, address_id: int):
-        stmt = (
-            delete(AddressModel).where(AddressModel.id == address_id)
-        )
+        stmt = delete(AddressModel).where(AddressModel.id == address_id)
         self.db.execute(stmt).all()

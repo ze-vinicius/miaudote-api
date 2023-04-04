@@ -13,7 +13,7 @@ app.add_middleware(
     allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"),
-    allow_headers=settings.CORS_HEADERS
+    allow_headers=settings.CORS_HEADERS,
 )
 
 app.include_router(pet_shelter_router)

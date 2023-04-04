@@ -7,9 +7,7 @@ from app.modules.pet_shelter.schemas.pet_shelter import PetShelterInDb
 
 class PetShelterRepository(BaseRepository):
     def create(self, payload: PetShelterInDb):
-        new_pet_shelter = PetShelterModel(
-            **payload.dict()
-        )
+        new_pet_shelter = PetShelterModel(**payload.dict())
 
         self.db.add(new_pet_shelter)
         self.db.commit()
@@ -27,7 +25,5 @@ class PetShelterRepository(BaseRepository):
         return self.db.query(PetShelterModel).where(PetShelterModel.id == id).first()
 
     def delete_one_by_id(self, address_id: int):
-        stmt = (
-            delete(PetShelterModel).where(PetShelterModel.id == address_id)
-        )
+        stmt = delete(PetShelterModel).where(PetShelterModel.id == address_id)
         self.db.execute(stmt).all()

@@ -1,4 +1,3 @@
-
 from typing import Optional
 from pydantic import BaseModel
 
@@ -18,4 +17,3 @@ class PetInDb(BaseModel):
 
     health_status: HealthStatus
     adoption_status: AdoptionStatus
-

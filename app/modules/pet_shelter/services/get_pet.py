@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy.orm.session import Session
-from app.modules.pet_shelter.exceptions import PetShelterNotFound
+from app.modules.pet_shelter.exceptions import PetNotFound
 
 from app.modules.pet_shelter.repositories.pet import PetRepository
 from app.modules.pet_shelter.schemas.pet import Pet
@@ -16,6 +16,6 @@ class GetPetService:
         found_pet = pet_repository.get_one_by_id(pet_id)
 
         if found_pet is None:
-            raise PetShelterNotFound()
+            raise PetNotFound()
 
         return Pet.from_orm(found_pet)

@@ -1,4 +1,3 @@
-from typing import List, Optional
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from app.core.dependencies import get_current_account_from_token
 from app.db.base import get_db
@@ -21,7 +20,7 @@ router = APIRouter(
 
 
 @router.get("/pet_shelters")
-def read_pet_shelters(db: Session = Depends(get_db)):
+def get_pet_shelters(db: Session = Depends(get_db)):
     pet_shelter_service = GetAllPetSheltersService(db)
 
     pet_shelters = pet_shelter_service.execute()
@@ -39,21 +38,21 @@ def create_pet_shelter(pet_shelter_form: PetShelterIn, db: Session = Depends(get
 
 
 @router.get("/pet_shelters/{pet_shelter_id}/pets")
-def get_all_pets_by_pet_shelter(pet_shelter_id: str, db: Session = Depends(get_db)):
+def get_pets_from_pet_shelter(pet_shelter_id: str, db: Session = Depends(get_db)):
     get_all_pets_by_pet_shelter_service = GetAllPetsFromPetShelter(db)
 
     return get_all_pets_by_pet_shelter_service.execute(pet_shelter_id)
 
 
 @router.get("/pet_shelters/{pet_shelter_id}")
-def get_one_pet_shelter(pet_shelter_id: int, db: Session = Depends(get_db)):
+def get_pet_shelter(pet_shelter_id: int, db: Session = Depends(get_db)):
     get_pet_shelter_service = GetPetShelterService(db)
 
     return get_pet_shelter_service.execute(pet_shelter_id)
 
 
-@router.get('/pets/{pet_id}')
-def get_one_pet(pet_id: int, db: Session = Depends(get_db)):
+@router.get("/pets/{pet_id}")
+def get_pet(pet_id: int, db: Session = Depends(get_db)):
     get_pet_service = GetPetService(db)
 
     return get_pet_service.execute(pet_id)
@@ -68,7 +67,6 @@ def create_pet(
 ):
     create_pet_service = CreatePetService(db)
 
-    pet = create_pet_service.execute(
-        pet_form=pet_form, profile_picture=profile_picture, account=current_account)
+    pet = create_pet_service.execute(pet_form=pet_form, profile_picture=profile_picture, account=current_account)
 
     return pet

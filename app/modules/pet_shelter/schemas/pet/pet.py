@@ -32,7 +32,7 @@ class Pet(BaseModel):
 
     profile_picture_url: Computed[str]
 
-    @computed('profile_picture_url')
+    @computed("profile_picture_url")
     def compute_profile_picture_url(profile_picture: Optional[str], **kwargs):
         return f"{settings.BUCKET_ENDPOINT}/{profile_picture}" if profile_picture else None
 

@@ -21,7 +21,6 @@ def get_current_account_from_token(token: str = Depends(oauth2_scheme), db: Sess
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         username: str = payload.get("sub")
-        print("username/email extracted is ", username)
         if username is None:
             raise credentials_exception
 
