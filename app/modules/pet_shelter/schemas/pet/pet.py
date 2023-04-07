@@ -34,7 +34,11 @@ class Pet(BaseModel):
 
     @computed("profile_picture_url")
     def compute_profile_picture_url(profile_picture: Optional[str], **kwargs):
-        return f"{settings.BUCKET_ENDPOINT}/{profile_picture}" if profile_picture else None
+        return (
+            f"{settings.BUCKET_ENDPOINT}/{profile_picture}"
+            if profile_picture
+            else None
+        )
 
     # @root_validator
     # def compute_profile_picture_url(cls, values):

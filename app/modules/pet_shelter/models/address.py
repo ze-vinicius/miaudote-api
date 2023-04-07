@@ -15,4 +15,6 @@ class AddressModel(Base):
     street_address: Mapped[Optional[str]]
     zip_code: Mapped[Optional[str]]
 
-    pet_shelter_id: Mapped[int] = mapped_column(ForeignKey("pet_shelters.id"), nullable=False)
+    pet_shelter_id: Mapped[int] = mapped_column(
+        ForeignKey("pet_shelters.id"), nullable=False
+    )

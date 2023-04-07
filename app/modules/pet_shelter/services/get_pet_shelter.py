@@ -2,7 +2,9 @@ from fastapi import HTTPException
 from sqlalchemy.orm.session import Session
 from app.modules.pet_shelter.exceptions import PetShelterNotFound
 
-from app.modules.pet_shelter.repositories.pet_shelter import PetShelterRepository
+from app.modules.pet_shelter.repositories.pet_shelter import (
+    PetShelterRepository,
+)
 from app.modules.pet_shelter.schemas.pet_shelter.pet_shelter import PetShelter
 
 

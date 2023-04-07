@@ -10,7 +10,9 @@ from app.modules.auth.repositories.account import AccountRepository
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth")
 
 
-def get_current_account_from_token(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+def get_current_account_from_token(
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+):
     credentials_exception = HTTPException(
         status_code=401,
         detail="sessions.invalid_token",
@@ -19,7 +21,9 @@ def get_current_account_from_token(token: str = Depends(oauth2_scheme), db: Sess
     account_repository = AccountRepository(db)
 
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception

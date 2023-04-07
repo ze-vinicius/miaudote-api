@@ -22,4 +22,6 @@ class PetModel(Base):
     health_status: Mapped[str]
 
     # Relatios
-    pet_shelter_id: Mapped[int] = mapped_column(ForeignKey("pet_shelters.id"), nullable=False)
+    pet_shelter_id: Mapped[int] = mapped_column(
+        ForeignKey("pet_shelters.id"), nullable=False
+    )

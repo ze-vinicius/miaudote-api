@@ -1,7 +1,15 @@
 from typing import Optional
 from pydantic import BaseModel
 
-from app.modules.pet_shelter.schemas.pet.enums import AdoptionStatus, Age, HealthStatus, Sex, Size, Species, Temper
+from app.modules.pet_shelter.schemas.pet.enums import (
+    AdoptionStatus,
+    Age,
+    HealthStatus,
+    Sex,
+    Size,
+    Species,
+    Temper,
+)
 
 
 class PetInDb(BaseModel):

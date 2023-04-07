@@ -1,4 +1,6 @@
-from app.modules.pet_shelter.repositories.pet_shelter import PetShelterRepository
+from app.modules.pet_shelter.repositories.pet_shelter import (
+    PetShelterRepository,
+)
 from sqlalchemy.orm import Session
 
 

@@ -6,7 +6,7 @@ from app.main import app
 
 from app.db.base import Base, get_db
 from app.modules.auth.repositories.account import AccountRepository
-from app.modules.auth.schemas.account import AccountCreate
+from app.modules.auth.schemas import AccountIn
 from app.modules.pet_shelter.repositories.address import AddressRepository
 from app.modules.pet_shelter.repositories.pet import PetRepository
 from app.modules.pet_shelter.repositories.pet_shelter import PetShelterRepository
@@ -17,6 +17,7 @@ from app.modules.pet_shelter.schemas.pet.pet_in_db import PetInDb
 from app.modules.pet_shelter.schemas.pet_shelter.pet_shelter import PetShelter
 from app.modules.pet_shelter.schemas.pet_shelter.pet_shelter_in import PetShelterIn
 from app.modules.pet_shelter.schemas.pet_shelter.pet_shelter_in_db import PetShelterInDb
+from app.utils.hash import Hash
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
@@ -59,7 +60,10 @@ def client(db):
 def account(db):
     account_repository = AccountRepository(db)
 
-    created_account = account_repository.create(AccountCreate(username="pet_shelter@email.com", password="12345678"))
+    hashed_password = Hash.encrypt("12345678")
+
+    created_account = account_repository.create(
+        AccountIn(username="pet_shelter@email.com", password=hashed_password))
 
     return created_account
 
@@ -80,7 +84,8 @@ def pet_shelter(db, account):
         "account_id": account.id,
     }
 
-    created_pet_shelter = pet_shelter_repository.create(PetShelterInDb(**pet_shelter_in_dict))
+    created_pet_shelter = pet_shelter_repository.create(
+        PetShelterInDb(**pet_shelter_in_dict))
 
     address_in_dict = {
         "street_address": "Some street",

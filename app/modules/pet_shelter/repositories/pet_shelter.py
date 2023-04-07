@@ -19,10 +19,18 @@ class PetShelterRepository(BaseRepository):
         return self.db.query(PetShelterModel).all()
 
     def get_one_by_account_id(self, account_id: int):
-        return self.db.query(PetShelterModel).where(PetShelterModel.account_id == account_id).first()
+        return (
+            self.db.query(PetShelterModel)
+            .where(PetShelterModel.account_id == account_id)
+            .first()
+        )
 
     def get_one_by_id(self, id: int):
-        return self.db.query(PetShelterModel).where(PetShelterModel.id == id).first()
+        return (
+            self.db.query(PetShelterModel)
+            .where(PetShelterModel.id == id)
+            .first()
+        )
 
     def delete_one_by_id(self, address_id: int):
         stmt = delete(PetShelterModel).where(PetShelterModel.id == address_id)

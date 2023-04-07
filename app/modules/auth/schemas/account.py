@@ -1,24 +1,9 @@
 from pydantic import BaseModel
 
 
-class AccountBase(BaseModel):
-    username: str
-
-
-class AccountCreate(AccountBase):
-    password: str
-
-
-class AccountAuth(AccountCreate):
-    pass
-
-
-class AccountInDbBase(AccountBase):
+class Account(BaseModel):
     id: int
+    username: str
 
     class Config:
         orm_mode = True
-
-
-class Account(AccountInDbBase):
-    pass

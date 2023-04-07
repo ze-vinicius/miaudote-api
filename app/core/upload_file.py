@@ -9,7 +9,9 @@ from app.core.config import settings
 
 def upload_file(file: UploadFile):
     s3_client = boto3.client(
-        "s3", aws_access_key_id=settings.AWS_ACCESS_KEY_ID, aws_secret_access_key=settings.AWS_SECRET_KEY
+        "s3",
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_KEY,
     )
 
     original_name = file.filename
