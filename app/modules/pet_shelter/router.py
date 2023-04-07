@@ -60,13 +60,14 @@ def get_pet(pet_id: int, db: Session = Depends(get_db)):
 
 @router.post("/pets")
 def create_pet(
-    pet_form: PetIn = Depends(PetIn.as_form),
+    pet_in: PetIn = Depends(PetIn.as_form),
     profile_picture: UploadFile = File(None),
     current_account: Account = Depends(get_current_account_from_token),
     db: Session = Depends(get_db),
 ):
     create_pet_service = CreatePetService(db)
 
-    pet = create_pet_service.execute(pet_form=pet_form, profile_picture=profile_picture, account=current_account)
+    pet = create_pet_service.execute(
+        pet_in=pet_in, profile_picture=profile_picture, account=current_account)
 
     return pet
