@@ -1,13 +1,10 @@
+from async_asgi_testclient import TestClient
 import pytest
 from app.core.dependencies import get_current_account_from_token
 from app.main import app
 from app.modules.auth.schemas.account import Account
-from app.modules.pet_shelter.repositories.pet_shelter import PetShelterRepository
-from app.modules.pet_shelter.schemas.pet.enums import AdoptionStatus, Age, HealthStatus, Sex, Size, Species, Temper
-from app.modules.pet_shelter.schemas.pet.pet_in import PetIn
-from app.modules.pet_shelter.schemas.pet_shelter import PetShelterIn, PetShelter
-from app.modules.pet_shelter.services.create_pet import CreatePetService
-from app.modules.pet_shelter.services.create_pet_shelter import CreatePetShelterService
+from app.modules.pet_shelter.schemas.pet_shelter import PetShelter
+from app.modules.pet_shelter.schemas.pet import Pet
 
 pet_shelter_in_complete = {
     "name": "Shelter Test",
@@ -27,9 +24,9 @@ pet_shelter_in_complete = {
     },
 }
 
-
-def test_create_pet_shelter_success(client):
-    response = client.post("/pet_shelters/", json=pet_shelter_in_complete)
+@pytest.mark.asyncio
+async def test_create_pet_shelter_success(client: TestClient):
+    response = await client.post("/pet_shelters/", json=pet_shelter_in_complete)
 
     assert response.status_code == 200
 
@@ -38,20 +35,21 @@ def test_create_pet_shelter_success(client):
     assert data["email"] == "shelter_test@email.com"
     assert data["name"] == "Shelter Test"
 
-
-def test_create_pet_shelter_duplicate_username(client):
-    response = client.post("/pet_shelters/", json=pet_shelter_in_complete)
-
-    response = client.post("/pet_shelters", json=pet_shelter_in_complete)
+@pytest.mark.asyncio
+async def test_create_pet_shelter_duplicate_username(client: TestClient, pet_shelter: PetShelter):
+    response = await client.post("/pet_shelters", json={
+        **pet_shelter_in_complete, 
+        "email": pet_shelter.email
+    })
 
     assert response.status_code == 400
     data = response.json()
 
     assert data["detail"] == "a_pet_shelter_with_this_email_already_exists"
 
-
-def test_get_pet_shelters(client, pet_shelter):
-    response = client.get("/pet_shelters/")
+@pytest.mark.asyncio
+async def test_get_pet_shelters(client: TestClient, pet_shelter: PetShelter):
+    response = await client.get("/pet_shelters/")
 
     assert response.status_code == 200
     data = response.json()
@@ -59,24 +57,25 @@ def test_get_pet_shelters(client, pet_shelter):
     assert len(data) == 1
 
 
-def test_get_pet_shelter_success(client, pet_shelter):
-    response = client.get("/pet_shelters/1")
+@pytest.mark.asyncio
+async def test_get_pet_shelter_success(client: TestClient, pet_shelter: PetShelter):
+    response = await client.get("/pet_shelters/1")
 
     data = response.json()
 
     assert data["email"] == pet_shelter.email
 
-
-def test_get_pet_shelter_not_found(client):
-    response = client.get("/pet_shelters/1")
+@pytest.mark.asyncio
+async def test_get_pet_shelter_not_found(client: TestClient):
+    response = await client.get("/pet_shelters/1")
 
     data = response.json()
 
     assert response.status_code == 404
     assert data["detail"] == "pet_shelter_not_found"
 
-
-def test_create_pet_success(client, pet_shelter: PetShelter):
+@pytest.mark.asyncio
+async def test_create_pet_success(client: TestClient, pet_shelter: PetShelter):
     def override_get_current_account_from_token():
         return Account(id=1, username="test_shelter@email.com")
 
@@ -94,33 +93,33 @@ def test_create_pet_success(client, pet_shelter: PetShelter):
         "adoption_status": "AVAILABLE",
     }
 
-    response = client.post("/pets/", data=pet_in_complete)
+    response = await client.post("/pets/", data=pet_in_complete)
 
     data = response.json()
     assert response.status_code == 200
     assert data["name"] == "Cute Pet Name"
 
-
-def test_get_pets_from_pet_shelter_success(client, pet_shelter, pet):
-    response = client.get(f"/pet_shelters/{pet_shelter.id}/pets")
+@pytest.mark.asyncio
+async def test_get_pets_from_pet_shelter_success(client: TestClient, pet_shelter: PetShelter, pet: Pet):
+    response = await client.get(f"/pet_shelters/{pet_shelter.id}/pets")
 
     data = response.json()
 
     assert response.status_code == 200
     assert len(data) == 1
 
-
-def test_get_pet_success(client, pet):
-    response = client.get("/pets/1")
+@pytest.mark.asyncio
+async def test_get_pet_success(client: TestClient, pet: Pet):
+    response = await client.get("/pets/1")
 
     data = response.json()
 
     assert response.status_code == 200
     assert data["name"] == pet.name
 
-
-def test_get_pet_not_found(client):
-    response = client.get("/pets/1")
+@pytest.mark.asyncio
+async def test_get_pet_not_found(client: TestClient):
+    response = await client.get("/pets/1")
 
     data = response.json()
 

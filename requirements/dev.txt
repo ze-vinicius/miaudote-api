@@ -1,9 +1,13 @@
 -r base.txt
+
 black
-httpx
 autoflake
 coverage
 flake8
-pytest
 coverage
+pytest
 pytest-env
+pytest-asyncio
+async-asgi-testclient
+mypy
+isort

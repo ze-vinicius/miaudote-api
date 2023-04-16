@@ -1,17 +1,19 @@
+from databases import Database
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
 from jose import JWTError, jwt
-from app.core.config import settings
 
-from app.db.base import get_db
+from app.core.config import settings
+from app.core.database import get_db
 from app.modules.auth.repositories.account import AccountRepository
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth")
 
+from app.modules.auth.schemas import Account
 
-def get_current_account_from_token(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
+
+async def get_current_account_from_token(
+    token: str = Depends(oauth2_scheme), db: Database = Depends(get_db)
 ):
     credentials_exception = HTTPException(
         status_code=401,
@@ -22,7 +24,7 @@ def get_current_account_from_token(
 
     try:
         payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+            token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM]
         )
         username: str = payload.get("sub")
         if username is None:
@@ -31,8 +33,9 @@ def get_current_account_from_token(
     except JWTError:
         raise credentials_exception
 
-    user = account_repository.get_one_by_username(username)
+    record = await account_repository.get_one_by_username(username)
 
-    if user is None:
+    if record is None:
         raise credentials_exception
-    return user
+
+    return Account.from_record(record)

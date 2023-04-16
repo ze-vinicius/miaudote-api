@@ -6,14 +6,14 @@ from app.modules.pet_shelter.schemas.address.address_in import AddressIn
 from app.modules.pet_shelter.schemas.pet_shelter.pet_shelter import PetShelter
 from app.modules.pet_shelter.schemas.pet_shelter.pet_shelter_in import PetShelterIn
 from app.modules.pet_shelter.services.create_pet_shelter import CreatePetShelterService
-
+from app.core.database import database
 
 @pytest.fixture
-def create_pet_shelter_service(db):
-    return CreatePetShelterService(db)
+def create_pet_shelter_service():
+    return CreatePetShelterService(database)
 
-
-def test_create_pet_shelter_success(create_pet_shelter_service):
+@pytest.mark.asyncio
+async def test_create_pet_shelter_success(create_pet_shelter_service):
     pet_shelter_in = PetShelterIn(
         name="Awesome Pet Shelter",
         email=EmailStr("awesome-pet-shelter@email.com"),
@@ -29,12 +29,12 @@ def test_create_pet_shelter_success(create_pet_shelter_service):
         ),
     )
 
-    pet_shelter = create_pet_shelter_service.execute(pet_shelter_in)
+    pet_shelter = await create_pet_shelter_service.execute(pet_shelter_in)
 
     assert pet_shelter.email == "awesome-pet-shelter@email.com"
 
-
-def test_create_pet_shelter_already_exists(create_pet_shelter_service, pet_shelter: PetShelter):
+@pytest.mark.asyncio
+async def test_create_pet_shelter_already_exists(create_pet_shelter_service, pet_shelter: PetShelter):
     pet_shelter_in = PetShelterIn(
         name="Awesome Pet Shelter",
         email=EmailStr(pet_shelter.email),
@@ -51,6 +51,6 @@ def test_create_pet_shelter_already_exists(create_pet_shelter_service, pet_shelt
     )
 
     with pytest.raises(PetShelterAlreadyExists) as exception:
-        pet_shelter = create_pet_shelter_service.execute(pet_shelter_in)
+        pet_shelter = await create_pet_shelter_service.execute(pet_shelter_in)
 
     assert exception.value.status_code == 400

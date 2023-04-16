@@ -1,32 +1,36 @@
-from sqlalchemy import delete
-from sqlalchemy.orm.session import Session
-from app.modules.auth.models.account import AccountModel
+from sqlalchemy import Column, DateTime, Identity, Integer, String, Table, func
+
+from app.core.database import metadata
+from app.modules.auth.schemas import AccountIn
 from app.utils.base_repository import BaseRepository
 
-from app.modules.auth.schemas import AccountIn
+accounts_table = Table(
+    "accounts",
+    metadata,
+    Column("id", Integer, Identity(), primary_key=True),
+    Column("username", String, nullable=False),
+    Column("password", String, nullable=False),
+    Column("created_at", DateTime, server_default=func.now(), nullable=False),
+    Column("updated_at", DateTime, onupdate=func.now(), nullable=True),
+)
 
 
 class AccountRepository(BaseRepository):
-    def create(self, payload: AccountIn):
-        new_account = AccountModel(
-            username=payload.username, password=payload.password
+    async def create(self, account_in: AccountIn):
+        query = (
+            accounts_table.insert()
+            .values(**account_in.dict())
+            .returning(accounts_table)
         )
 
-        self.db.add(new_account)
-        self.db.commit()
-        self.db.refresh(new_account)
+        return await self.db.fetch_one(query)
 
-        return new_account
+    async def get_one_by_username(self, username: str):
+        query = accounts_table.select().where(accounts_table.c.username == username)
 
-    def get_one_by_username(self, username: str):
-        account = (
-            self.db.query(AccountModel)
-            .where(AccountModel.username == username)
-            .first()
-        )
+        return await self.db.fetch_one(query)
 
-        return account
+    async def delete_one_by_id(self, id: int):
+        query = accounts_table.delete().where(accounts_table.c.id == id)
 
-    def delete_one_by_id(self, address_id: int):
-        stmt = delete(AccountModel).where(AccountModel.id == address_id)
-        self.db.execute(stmt).all()
+        return await self.db.fetch_one(query)

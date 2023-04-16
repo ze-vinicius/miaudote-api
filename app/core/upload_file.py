@@ -1,8 +1,9 @@
 import logging
+from uuid import uuid4
+
 import boto3
 from botocore.utils import ClientError
 from fastapi import UploadFile
-from uuid import uuid4
 
 from app.core.config import settings
 

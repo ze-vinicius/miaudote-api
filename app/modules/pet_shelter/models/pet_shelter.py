@@ -1,28 +1,29 @@
-from typing import Optional
-from app.modules.auth.models.account import AccountModel
-from app.modules.pet_shelter.models.address import AddressModel
-from app.db.base import Base
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import (
+    Column,
+    DateTime,
+    ForeignKey,
+    Identity,
+    Integer,
+    String,
+    Table,
+    func,
+)
 
+from app.core.database import metadata
 
-class PetShelterModel(Base):
-    __tablename__ = "pet_shelters"
-
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    name: Mapped[str]
-    email: Mapped[str]
-    phone: Mapped[str]
-    description: Mapped[str]
-    profile_picture: Mapped[Optional[str]]
-
-    # Social Media
-    instagram_address: Mapped[Optional[str]]
-    facebook_address: Mapped[Optional[str]]
-    twitter_address: Mapped[Optional[str]]
-
-    # Relations
-    account_id: Mapped[int] = mapped_column(ForeignKey("accounts.id"))
-    account: Mapped["AccountModel"] = relationship()
-
-    address: Mapped["AddressModel"] = relationship()
+pet_shelters_table = Table(
+    "pet_shelters",
+    metadata,
+    Column("id", Integer, Identity(), primary_key=True),
+    Column("name", String, nullable=False),
+    Column("email", String, nullable=False),
+    Column("phone", String, nullable=False),
+    Column("description", String, nullable=False),
+    Column("profile_picture", String, nullable=True),
+    Column("instagram_address", String, nullable=True),
+    Column("facebook_address", String, nullable=True),
+    Column("twitter_address", String, nullable=True),
+    Column("owner_id", Integer, ForeignKey("accounts.id"), nullable=False),
+    Column("created_at", DateTime, server_default=func.now(), nullable=False),
+    Column("updated_at", DateTime, onupdate=func.now(), nullable=True),
+)

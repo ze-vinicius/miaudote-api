@@ -13,4 +13,4 @@ class PetShelterInDb(BaseModel):
     facebook_address: Optional[str]
     twitter_address: Optional[str]
 
-    account_id: int
+    owner_id: int

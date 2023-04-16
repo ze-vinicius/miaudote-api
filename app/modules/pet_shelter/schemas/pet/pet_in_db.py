@@ -1,4 +1,5 @@
 from typing import Optional
+
 from pydantic import BaseModel
 
 from app.modules.pet_shelter.schemas.pet.enums import (

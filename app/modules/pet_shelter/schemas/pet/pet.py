@@ -1,18 +1,11 @@
-from typing import Optional
-from pydantic import BaseModel, root_validator, validator
-from pydantic_computed import Computed, computed
+from typing import Dict, Optional
 
-from app.modules.pet_shelter.schemas.pet_shelter import PetShelter
+from pydantic import root_validator
+
 from app.core.config import settings
-from .enums import (
-    AdoptionStatus,
-    Age,
-    HealthStatus,
-    Sex,
-    Size,
-    Temper,
-    Species,
-)
+from app.core.models import BaseModel
+
+from .enums import AdoptionStatus, Age, HealthStatus, Sex, Size, Species, Temper
 
 
 class Pet(BaseModel):
@@ -30,28 +23,14 @@ class Pet(BaseModel):
     health_status: HealthStatus
     adoption_status: AdoptionStatus
 
-    profile_picture_url: Computed[str]
+    profile_picture_url: Optional[str]
 
-    @computed("profile_picture_url")
-    def compute_profile_picture_url(profile_picture: Optional[str], **kwargs):
-        return (
-            f"{settings.BUCKET_ENDPOINT}/{profile_picture}"
-            if profile_picture
-            else None
+    @root_validator
+    def compute_profile_picture_url(cls: BaseModel, values: Dict) -> Dict:
+        profile_picture = values["profile_picture"]
+
+        values["profile_picture_url"] = (
+            f"{settings.BUCKET_ENDPOINT}/{profile_picture}" if profile_picture else None
         )
 
-    # @root_validator
-    # def compute_profile_picture_url(cls, values):
-    #     if values['profile_picture_url'] is None:
-    #         profile_picture = values['profile_picture']
-    #
-    #         profile_picture_url = f"{settings.BUCKET_ENDPOINT}/{profile_picture}"
-    #
-    #         print({profile_picture_url, values})
-    #
-    #         values['profile_picture_url'] = profile_picture_url
-    #
-    #     return values
-
-    class Config:
-        orm_mode = True
+        return values

@@ -1,5 +1,5 @@
-from app.modules.pet_shelter.constants import ErrorCode
 from app.core.exceptions import BadRequest, NotFound
+from app.modules.pet_shelter.constants import ErrorCode
 
 
 class PetShelterAlreadyExists(BadRequest):

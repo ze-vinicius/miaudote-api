@@ -1,14 +1,16 @@
 from typing import Optional, Type
+
 from fastapi import Form
 from pydantic import BaseModel
+
 from app.modules.pet_shelter.schemas.pet.enums import (
+    AdoptionStatus,
     Age,
+    HealthStatus,
     Sex,
     Size,
     Species,
     Temper,
-    HealthStatus,
-    AdoptionStatus,
 )
 
 

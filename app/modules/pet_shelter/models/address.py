@@ -1,20 +1,26 @@
-from typing import Optional
-from ....db.base import Base
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import (
+    Column,
+    DateTime,
+    ForeignKey,
+    Identity,
+    Integer,
+    String,
+    Table,
+    func,
+)
 
+from app.core.database import metadata
 
-class AddressModel(Base):
-    __tablename__ = "addresses"
-
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-
-    city: Mapped[str]
-    country: Mapped[str]
-    state: Mapped[str]
-    street_address: Mapped[Optional[str]]
-    zip_code: Mapped[Optional[str]]
-
-    pet_shelter_id: Mapped[int] = mapped_column(
-        ForeignKey("pet_shelters.id"), nullable=False
-    )
+addresses_table = Table(
+    "addresses",
+    metadata,
+    Column("id", Integer, Identity(), primary_key=True),
+    Column("city", String, nullable=False),
+    Column("country", String, nullable=False),
+    Column("state", String, nullable=False),
+    Column("street_address", String, nullable=True),
+    Column("zip_code", String, nullable=True),
+    Column("pet_shelter_id", Integer, ForeignKey("pet_shelters.id"), nullable=False),
+    Column("created_at", DateTime, server_default=func.now(), nullable=False),
+    Column("updated_at", DateTime, onupdate=func.now(), nullable=True),
+)

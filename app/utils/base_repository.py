@@ -1,6 +1,6 @@
-from sqlalchemy.orm.session import Session
+from databases import Database
 
 
 class BaseRepository:
-    def __init__(self, db: Session):
+    def __init__(self, db: Database):
         self.db = db

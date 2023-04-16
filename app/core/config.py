@@ -1,8 +1,9 @@
-import os
-from dotenv import load_dotenv
-
 from pathlib import Path
+
+from dotenv import load_dotenv
 from pydantic import BaseSettings
+
+from app.core.constants import Environment
 
 env_path = Path(".") / ".env"
 load_dotenv(dotenv_path=env_path)
@@ -24,6 +25,8 @@ class Settings(BaseSettings):
 
     CORS_ORIGINS: str
     CORS_HEADERS: str
+
+    ENVIRONMENT: Environment = Environment.PRODUCTION
 
 
 settings = Settings()

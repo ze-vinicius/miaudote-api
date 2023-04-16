@@ -1,4 +1,5 @@
 from typing import Optional
+
 from pydantic import BaseModel, EmailStr
 
 from app.modules.pet_shelter.schemas.address import AddressIn
@@ -15,4 +16,5 @@ class PetShelterIn(BaseModel):
     twitter_address: Optional[str] = None
 
     address: AddressIn
+
     password: str

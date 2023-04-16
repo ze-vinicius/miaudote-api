@@ -1,7 +1,14 @@
 fastapi
 uvicorn
+httpx
+
+databases[asyncpg]
 pydantic[email]
+psycopg2
 sqlalchemy
+pydantic_computed
+alembic
+
 passlib
 bcrypt
 python-jose[cryptography]
@@ -9,4 +16,4 @@ python-dotenv
 python-multipart
 boto3
 uuid
-pydantic_computed
+

@@ -1,9 +1,6 @@
-from pydantic import BaseModel
+from app.core.models import BaseModel
 
 
 class Account(BaseModel):
     id: int
     username: str
-
-    class Config:
-        orm_mode = True

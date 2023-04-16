@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from app.core.models import BaseModel
 
 
 class Address(BaseModel):
@@ -11,5 +11,4 @@ class Address(BaseModel):
     street_address: Optional[str]
     zip_code: Optional[str]
 
-    class Config:
-        orm_mode = True
+    pet_shelter_id: int

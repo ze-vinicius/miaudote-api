@@ -1,5 +1,5 @@
-from app.modules.auth.constants import ErrorCode
 from app.core.exceptions import BadRequest, NotAuthenticated, PermissionDenied
+from app.modules.auth.constants import ErrorCode
 
 
 class AuthRequired(NotAuthenticated):

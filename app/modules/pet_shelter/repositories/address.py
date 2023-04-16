@@ -1,20 +1,19 @@
-from app.modules.pet_shelter.models.address import AddressModel
-from app.utils.base_repository import BaseRepository
-
+from app.modules.pet_shelter.models import addresses_table
 from app.modules.pet_shelter.schemas.address import AddressInDb
-from sqlalchemy import delete
+from app.utils.base_repository import BaseRepository
 
 
 class AddressRepository(BaseRepository):
-    def create(self, payload: AddressInDb):
-        new_address = AddressModel(**payload.dict())
+    async def create(self, address_in: AddressInDb):
+        query = (
+            addresses_table.insert()
+            .values(**address_in.dict())
+            .returning(addresses_table)
+        )
 
-        self.db.add(new_address)
-        self.db.commit()
-        self.db.refresh(new_address)
+        return await self.db.fetch_one(query)
 
-        return new_address
+    async def delete_one_by_id(self, id: int):
+        query = addresses_table.delete().where(addresses_table.c.id == id)
 
-    def delete_one_by_id(self, address_id: int):
-        stmt = delete(AddressModel).where(AddressModel.id == address_id)
-        self.db.execute(stmt).all()
+        return await self.db.fetch_one(query)

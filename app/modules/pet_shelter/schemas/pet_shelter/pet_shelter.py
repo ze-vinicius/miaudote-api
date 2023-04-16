@@ -1,7 +1,8 @@
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import EmailStr
 
+from app.core.models import BaseModel
 from app.modules.pet_shelter.schemas.address import Address
 
 
@@ -16,8 +17,5 @@ class PetShelter(BaseModel):
     facebook_address: Optional[str]
     twitter_address: Optional[str]
 
-    account_id: int
+    owner_id: int
     address: Address
-
-    class Config:
-        orm_mode = True
