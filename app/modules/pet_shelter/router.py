@@ -20,6 +20,7 @@ from app.modules.pet_shelter.services.get_all_pets_from_pet_shelter import (
 )
 from app.modules.pet_shelter.services.get_pet import GetPetService
 from app.modules.pet_shelter.services.get_pet_shelter import GetPetShelterService
+from app.modules.pet_shelter.services.get_pets import GetPetsService
 
 router = APIRouter(
     tags=["pet_shelters", "pets"],
@@ -68,15 +69,13 @@ async def get_pet_shelter(pet_shelter_id: int, db: Database = Depends(get_db)):
 
     return pet_shelter
 
+@router.get("/pets")
+async def get_pets(skip: int = 0, limit: int = 20, db: Database = Depends(get_db)):
+    service = GetPetsService(db)
+    
+    pets = await service.execute(skip=skip, limit=limit)
 
-@router.get("/pets/{pet_id}", response_model=Pet)
-async def get_pet(pet_id: int, db: Database = Depends(get_db)):
-    get_pet_service = GetPetService(db)
-
-    pet = await get_pet_service.execute(pet_id)
-
-    return pet
-
+    return pets
 
 @router.post("/pets", response_model=Pet)
 async def create_pet(
@@ -92,3 +91,13 @@ async def create_pet(
     )
 
     return pet
+
+@router.get("/pets/{pet_id}", response_model=Pet)
+async def get_pet(pet_id: int, db: Database = Depends(get_db)):
+    get_pet_service = GetPetService(db)
+
+    pet = await get_pet_service.execute(pet_id)
+
+    return pet
+
+

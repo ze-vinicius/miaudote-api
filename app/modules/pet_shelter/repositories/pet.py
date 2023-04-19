@@ -1,4 +1,4 @@
-from sqlalchemy import insert, select
+from sqlalchemy import insert, select, func
 
 from app.modules.pet_shelter.models import pets_table
 from app.modules.pet_shelter.schemas.pet import PetInDb
@@ -11,8 +11,8 @@ class PetRepository(BaseRepository):
 
         return await self.db.fetch_one(query)
 
-    async def get_all(self):
-        query = select(pets_table)
+    async def get_all(self, skip: int = 0, limit: int = 20):
+        query = select(pets_table).limit(limit).offset(skip)
 
         result = await self.db.fetch_all(query)
 
@@ -27,3 +27,8 @@ class PetRepository(BaseRepository):
         query = select(pets_table).where(pets_table.c.id == id)
 
         return await self.db.fetch_one(query)
+
+    async def count_pets(self):
+        query = select(func.count()).select_from(pets_table)
+
+        return await self.db.fetch_val(query)
